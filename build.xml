@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="doccube_project" basedir="." default="build_core_jar">
+	<property file ="build.properties" /> 
+	<property environment="env" />
+    <property name="project.root" value="${basedir}" />
+	<property name="dir.java.src" value="src/main/java" />
+	<property name="dir.java.res" value="src/main/resources" />
+	<property name="dir.java.class" value="target/classes" />
+	<property name="dir.java.ext" value="ext" />
+	<!-- Properties and Paths -->
+	<property file="build.properties" />
+	
+	<path id="project.class.path">
+		<pathelement location="${dir.java.class}"/>
+		<fileset dir="${dir.lib}" id="lib.path">
+			<include name="**/*.jar"/>
+		</fileset>	   
+	</path>
+
+	<!-- ============ Core.jar Processing start -->
+	<property name="obal.core.jar" value="obal.core-${obal.core.version}.jar"/>
+	<target name="build_core_jar" description="Build Obal Core jar">
+
+		<echo message="---[ Building Core jar ]---"/>
+        <jar jarfile="${dir.java.ext}/${obal.core.jar}" >
+			<fileset dir="${dir.java.class}">
+				<include name="**/dcube/**/*.*"/>
+				<include name="**/META-INF/**/*.*"/>
+				<exclude name="**/META-INF/maven/**/*.*"/>
+			</fileset>
+			<manifest>
+				<attribute name="Application-Name" value="obal.core.library"/>
+				<attribute name="Build-By" value="despird-zh"/>
+				<attribute name="Implementation-Vendor" value="despird-zh"/>
+				<attribute name="Implementation-Title" value="obal.core"/>
+				<attribute name="Implementation-Version" value="${obal.core.version}"/>
+				<attribute name="Caller-Allowable-Codebase" value="*"/>
+				<attribute name="Permissions" value="all-permissions"/>
+				<attribute name="Trusted-Library" value="true"/>
+			</manifest>
+        </jar>
+    </target>
+	<!-- ============ Core.jar Processing end -->
+	<!-- ============ hbase side ext.jar Processing start -->
+	<property name="obal.ext.jar" value="obal.ext-${obal.core.version}.jar"/>
+	<target name="build_ext_jar" description="Build Obal extend jar">
+
+		<echo message="---[ Building Hbase Side Core jar ]---"/>
+        <jar jarfile="${dir.java.ext}/${obal.ext.jar}" >
+			<fileset dir="${dir.java.class}">
+				<include name="com/dcube/core/hbase/HAclBrowseFilter*.*"/>
+				<include name="com/dcube/common/SimpleConverter*.*"/>
+				<include name="com/dcube/core/security/AclConstants*.*"/>
+			</fileset>
+			<manifest>
+				<attribute name="Application-Name" value="obal.core.library"/>
+				<attribute name="Build-By" value="despird-zh"/>
+				<attribute name="Implementation-Vendor" value="despird-zh"/>
+				<attribute name="Implementation-Title" value="obal.core"/>
+				<attribute name="Implementation-Version" value="${obal.core.version}"/>
+				<attribute name="Caller-Allowable-Codebase" value="*"/>
+				<attribute name="Permissions" value="all-permissions"/>
+				<attribute name="Trusted-Library" value="true"/>
+			</manifest>
+        </jar>
+    </target>
+	<!-- ============ hbase side ext.jar Processing end -->
+	<target name="scp_send_file" description="ssh send file" depends="build_ext_jar">
+		<echo message="---[ Try to create extlib directory ]---"/>
+		<sshexec host ="${ssh.server}" 
+		username ="${ssh.user}" 
+		password ="${ssh.password}" 
+		trust ="true" 
+		verbose ="false"
+		command ="
+				if [ ! -e ${server.target.path} ]; then
+					mkdir -p ${server.target.path};
+				fi;
+		"> 
+        </sshexec>
+		<echo message="---[ Try to remove library file ]---"/>
+		<sshexec host ="${ssh.server}" 
+		username ="${ssh.user}" 
+		password ="${ssh.password}" 
+		trust ="true" 
+		verbose ="false"
+		command ="
+				if [ -f ${server.target.path}/${obal.ext.jar} ]; then
+                    rm ${server.target.path}/${obal.ext.jar};
+                fi;
+		"> 
+        </sshexec> 
+		<echo message="---[ Copy local file to server ]---"/>
+		<scp file ="${dir.java.ext}/${obal.ext.jar}"
+		todir ="${ssh.user}:${ssh.password}@${ssh.server}:${server.target.path}"
+		trust ="true"
+		verbose ="false"/>
+	</target>
+	
+	<target name="start-hbase" description="start hbase server">
+		<sshexec host ="${ssh.server}" 
+		username ="${ssh.user}" 
+		password ="${ssh.password}" 
+		trust ="true" 
+		verbose ="false"
+		command ="start-hbase.sh"> 
+        </sshexec> 
+	</target>
+	
+	<target name="stop-hbase" description="stop hbase server">
+		<sshexec host ="${ssh.server}" 
+		username ="${ssh.user}" 
+		password ="${ssh.password}" 
+		trust ="true" 
+		verbose ="false"
+		command ="stop-hbase.sh"> 
+        </sshexec> 
+	</target>
+</project>

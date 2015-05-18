@@ -20,8 +20,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
+
 /**
- * 调用参数类，封装启动及其他操作参数 
+ * NetcmdArgs wrap and parse the parameters
  **/
 public class NetcmdArgs {
 	
@@ -43,20 +44,22 @@ public class NetcmdArgs {
 	
 	public static final String PARAM_DELIMITER = ";";
 	public static final String PARAM_ESCAPE = "&";
-	/** 命令 */
+	/** command */
 	private Netcmd command ;
-	/** 原始命令参数 */
+	/** raw command string, for unkown command, it holds the original command */
 	private String rawcommand;
-	/** 命令关联参数 */
+	/** command parameter */
 	private String[] args = new String[0];
 	
 	/**
-	 * 构造函数 
+	 * constructor
 	 **/
 	public NetcmdArgs(){}
 	
 	/**
-	 * 构造函数，接收命令和附加参数 
+	 * constructor with command and parameters 
+	 * @param command the command string
+	 * @param args the parameter coupled with command
 	 **/
 	public NetcmdArgs(Netcmd command, String[] args){
 		this.command = command;
@@ -64,7 +67,7 @@ public class NetcmdArgs {
 	}
 	
 	/**
-	 * 构造函数，通过数组进行参数设置 
+	 * constructor with parameter
 	 **/
 	public NetcmdArgs(String[] args){
 		if(args != null && args.length > 0){
@@ -74,22 +77,22 @@ public class NetcmdArgs {
 	}
 	
 	/**
-	 * 获取命令 
+	 * Get command
 	 **/
 	public Netcmd getCommand(){
 		return this.command;
 	}
 	
 	/**
-	 * 获取原始的命令字符串，由于非合法的命令都是 Netcmd.unknown，因此
-	 * 原始命令保存在rawcommand中
+	 * Get raw command string
 	 **/
 	public String getRawcommand(){
 		
 		return this.rawcommand;
 	}
+	
 	/**
-	 * 获取命令参数 
+	 * Get command parameter
 	 **/
 	public String[] getArgs(){
 		
@@ -97,7 +100,7 @@ public class NetcmdArgs {
 	}
 	
 	/**
-	 * 转化成可传输字符串 
+	 * convert to sendable string to transfer via network
 	 **/
 	public String toSendable(){
 		
@@ -117,7 +120,7 @@ public class NetcmdArgs {
 	}
 	
 	/**
-	 * 通过字符串进行参数解析和设置 
+	 * Initial with string transfered via network.
 	 **/
 	public void readSendable(String senddata){
         StringTokenizer st = new StringTokenizer(senddata, ";");

@@ -31,7 +31,7 @@ import com.dcube.dlan.launcher.CoreConfigs;
 import com.dcube.dlan.launcher.CoreFacade;
 
 /**
- * 根据请求参数执行命令 
+ * Remote command handler, it wraps a socket object and extract the command via socket.
  **/
 public class NetcmdHandler{
 
@@ -47,14 +47,23 @@ public class NetcmdHandler{
 	public NetcmdHandler() {
 	}
     
+	/**
+	 * Constructor with socket  
+	 **/
 	public NetcmdHandler(Socket netcmdsocket) {
 		this.rcvsocket = netcmdsocket;
 	}
 
+	/**
+	 * Set the net command socket from remote client 
+	 **/
 	public void setNetcmdSocket(Socket netcmdsocket){
 		this.rcvsocket = netcmdsocket;
 	}
 	
+	/**
+	 * Process the net command  
+	 **/
 	public void processNetcmd(){
 
 		BufferedReader br = null;
@@ -119,9 +128,9 @@ public class NetcmdHandler{
 	}
 
 	/**
-	 * 发出响应消息
-	 * @param message 消息内容
-	 * @param endofcommn 网络通信结束标志,true 结束通信；false 继续通信
+	 * Send the response message
+	 * @param message the content
+	 * @param endofcommn communication stop flag,true end ;false keep connective.
 	 **/
 	public void sendResponseMsg(String message, boolean endofcomm){
 		
@@ -147,7 +156,7 @@ public class NetcmdHandler{
 	}
 	
     /**
-     * 处理启动命令，由于CoreFacade中已经执行处理，因此此处仅用于提示系统已经启动
+     * Process the startup command
      * @param args the arguments that sent by net or console
      */
     public void procStartupCmd(NetcmdArgs args)
@@ -158,7 +167,7 @@ public class NetcmdHandler{
     }
 
     /**
-     * 执行关闭命令
+     * Process shutdown command
      * @param args the arguments that sent by net or console
      */
     public void procShutdownCmd(NetcmdArgs args)
@@ -173,7 +182,7 @@ public class NetcmdHandler{
     }
     
     /**
-     * 处理帮助信息命令
+     * process help command
      * @param args the arguments that sent by net or console
      */
     public void procHelpCmd(NetcmdArgs args)
@@ -183,7 +192,7 @@ public class NetcmdHandler{
     }
     
     /**
-     * 处理启动消息接收任务命令
+     * process start service command
      * @param args the arguments that sent by net or console
      */
     public void procStartCmd(NetcmdArgs args)
@@ -192,7 +201,7 @@ public class NetcmdHandler{
     }
     
     /**
-     * 处理启动消息接收任务命令
+     * process stop service command
      * @param args the arguments that sent by net or console
      */
     public void procStopCmd(NetcmdArgs args)
@@ -201,7 +210,7 @@ public class NetcmdHandler{
     }
     
     /**
-     * 处理查询消息接收任务命令
+     * process status list command
      * @param args the arguments that sent by net or console
      */
     public void procListCmd(NetcmdArgs args)

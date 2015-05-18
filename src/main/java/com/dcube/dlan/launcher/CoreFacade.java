@@ -32,7 +32,7 @@ import com.dcube.launcher.Lifecycle;
 import com.dcube.launcher.LifecycleHooker;
 
 /**
- * 核心启动类 
+ * Core Application entrance class
  **/
 public class CoreFacade extends Lifecycle{
 	
@@ -49,7 +49,7 @@ public class CoreFacade extends Lifecycle{
 	}
 	
 	/**
-	 * 隐藏的构造函数
+	 * Hidden default constructor
 	 */
 	private CoreFacade(String args[])
 	{
@@ -124,7 +124,7 @@ public class CoreFacade extends Lifecycle{
 	}
 	
 	/**
-	 * 启动入口
+	 * Application entrance.
 	 */
 	public static void main(String args[])
 	{

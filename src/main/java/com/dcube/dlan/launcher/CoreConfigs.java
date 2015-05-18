@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 核心配置读取类，用于读取配置文件中的相关信息
+ * CoreConfigs be used to access the configuration of core instance.
  *  
  **/
 public class CoreConfigs {
@@ -35,7 +35,7 @@ public class CoreConfigs {
 	}
 	
 	/**
-	 * 获得网络命令端口配置 
+	 * Get the network port of remote command listener
 	 **/
 	public static int getNetcmdPort(){
 		

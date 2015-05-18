@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.dcube.dlan.launcher.CoreConfigs;
 
 /**
- * 控制台命令发送器
+ * network command sender
  * @author Gary Diao
  * @version 1.0 DEC 11, 2008
  * @since 	
@@ -38,11 +38,11 @@ public class NetcmdSender {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final String[] args;
-	/** 命令响应消息 */
+	/** command response  */
 	private String cmdresponse;
 	
 	/**
-	 * 构造函数
+	 * constructor with command parameter
 	 * @param _args the command arguments to be sent.
 	 */
     public NetcmdSender(String[] _args) {
@@ -51,7 +51,7 @@ public class NetcmdSender {
     }    
     
     /**
-     * 发送命令参数信息
+     * send network command
      * @return true if successful, false if connection attempt failed
      */
     public boolean sendNetcmdArgs() {
@@ -80,15 +80,15 @@ public class NetcmdSender {
 			while(true){
 				
 				cmdresponse = br.readLine();				
-				if(cmdresponse == null)// 未读到数据情况，终止while loop
+				if(cmdresponse == null)// no response data, break while loop
 					break;
-				// 检测通信终止字符
+				// detect the eof flag
 				if(isEndofComm = cmdresponse.endsWith(NetcmdHandler.EOCOMM_STRING))
 					cmdresponse = cmdresponse.substring(0, cmdresponse.lastIndexOf(NetcmdHandler.EOCOMM_STRING));
-				// 换行符转换
+				// convert the new-line char
 				cmdresponse = cmdresponse.replaceAll("nnn","\n");
 				System.out.println(cmdresponse);
-				if(isEndofComm) // 终止while loop
+				if(isEndofComm) // break while loop
 					break;
 			}
 			logger.debug("complete command sending");

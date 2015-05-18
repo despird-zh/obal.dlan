@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.dcube.dlan.launcher.CoreConfigs;
 
 /**
- * 控制台命令监听器
+ * Network command listener
  * @author Gary Diao
  * @version 1.0 DEC 11, 2008
  * @since
@@ -54,6 +54,7 @@ public class NetcmdListener
     private Thread lsnrTrd = null;
 
     private Thread hdlrTrd = null;
+    
     /**
      * Net Command listener constructor, here a Serversock will be created, and set the state<br>
      * to STATE_LISTENING, if the socket port is used by others the state will be STATE_FAULTY.<br>
@@ -123,7 +124,7 @@ public class NetcmdListener
      **/
     private void startProcesssNetcmd(final NetcmdHandler cmdhandler){
     	
-        // 命令处理线程
+        // handler process
         hdlrTrd = new Thread(new Runnable(){
 
 			@Override
